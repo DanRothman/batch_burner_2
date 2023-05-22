@@ -479,6 +479,7 @@ class Ui_MainWindow(object):
         currentPOG = getPOG(apiServer,storewideFilterString)
         POGDict = self.convertListToDict(currentPOG)
         
+        showDialog("info","New Gondola updated!","Notice")
         
         self.showPOGTable()
         return
