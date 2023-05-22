@@ -3,10 +3,12 @@ from configparser import ConfigParser
 from DBUtils import getPOG, getDictionary,getProductUPCs
 from Messageboxes import msgButtonClick
 from POGUpdatorUI import setupUILayout,retranslateUi
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox,QComboBox
+from PyQt5.QtGui import QIcon
 from Messageboxes import *
 from POGUpdatingDefs import * # deleteShelvesAndFacings,addFacings,addShelves
 # import json, requests
+import os
 
 configFilePath = r'config.ini'  #ini file path
 cfg = ConfigParser()
@@ -23,13 +25,17 @@ upcColumn = 3
 
 storewideFilterString = "filter=storeid="+str(storeID)
 
+class NoWheelEventComboBox(QComboBox):
+    def wheelEvent(self, event):
+        pass
+
+
 class Ui_MainWindow(object):
     
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         setupUILayout(self,MainWindow)
         retranslateUi(self,MainWindow)
-       
 
     def showPOGTable(self):
         try:
@@ -83,7 +89,8 @@ class Ui_MainWindow(object):
                 self.table_header.append(attribute) 
                 
                 if col == upcColumn:
-                    cb = QtWidgets.QComboBox()
+                    # cb = QtWidgets.QComboBox()
+                    cb = NoWheelEventComboBox()
                     cb.addItems(productList)
                     cb.setStyleSheet("QComboBox"
                                      "{"
@@ -484,6 +491,9 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle('Windows')
+
+    path = os.path.join(os.path.dirname(sys.modules[__name__].__file__), 'logo.png')
+    app.setWindowIcon(QIcon(path))
    
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
